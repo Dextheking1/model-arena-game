@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Model Arena - a game AI models play themselves</title>
+<meta name="description" content="Four Pollinations models play a rock-paper-scissors league against each other. Every move is a real model call. Bring your own Pollen.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-mark" aria-hidden="true">MA</div>
+    <div>
+      <h1>Model Arena</h1>
+      <p class="tagline">A game AI models play themselves</p>
+    </div>
+  </div>
+  <div class="topbar-status">
+    <span id="modeBadge" class="badge badge-demo">Demo mode - simulated moves</span>
+    <span id="keyStatus" class="key-status">No key set</span>
+  </div>
+</header>
+
+<main class="layout">
+  <section class="panel setup-panel" aria-label="Setup">
+    <h2>1. Your Pollen key</h2>
+    <p class="hint">
+      Bring your own Pollen. Paste a Pollinations secret key (sk_...) below.
+      The key is stored only in this browser, in localStorage, and requests
+      go only to gen.pollinations.ai. No key? The arena still runs in demo
+      mode with clearly labelled simulated moves.
+    </p>
+    <label class="field-label" for="keyInput">Pollinations API key</label>
+    <div class="key-row">
+      <input id="keyInput" type="password" autocomplete="off" spellcheck="false" placeholder="sk_...">
+      <button id="validateKeyBtn" type="button">Validate key</button>
+      <button id="clearKeyBtn" type="button" class="ghost">Clear</button>
+    </div>
+    <p id="keyMessage" class="key-message" role="status"></p>
+    <p class="hint">
+      Get a key at enter.pollinations.ai. Each move is one small chat call,
+      a full 6 match league is 60 calls on the cheapest models.
+    </p>
+
+    <h2>2. Pick 4 fighters</h2>
+    <p class="hint">Exactly 4 models play a round robin league: 6 matches, 5 rounds each. Win a match for 3 league points, draw for 1.</p>
+    <div id="modelPicker" class="model-picker"></div>
+    <label class="field-label" for="customModel">Custom model id (optional, replaces the 4th pick)</label>
+    <input id="customModel" type="text" autocomplete="off" spellcheck="false" placeholder="e.g. community/morriszdweck/glm-5.3-flash-free">
+    <p id="pickerMessage" class="key-message" role="status"></p>
+
+    <h2>3. Run the league</h2>
+    <div class="controls">
+      <button id="startBtn" type="button" class="primary">Start league</button>
+      <button id="nextRoundBtn" type="button" disabled>Play next round</button>
+      <button id="autoBtn" type="button" disabled>Auto-play league</button>
+      <button id="resetBtn" type="button" class="ghost">Reset</button>
+    </div>
+    <p class="hint">
+      Every round, each model gets the full match history and standings in
+      its prompt and answers with one JSON move and its own win probability.
+      An illegal answer gets one retry, then the round is forfeited.
+    </p>
+    <div class="rules-box">
+      <h3>How to watch it</h3>
+      <ul>
+        <li>Rock beats scissors, scissors beats paper, paper beats rock.</li>
+        <li>The reasoning line under each move is the model's own words.</li>
+        <li>The % is the model's own estimate of winning that round.</li>
+        <li>Good players stop repeating themselves. Watch who adapts.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="panel arena-panel" aria-label="Arena">
+    <div id="demoBanner" class="demo-banner">
+      Demo mode: no key set, so all moves are simulated locally. Add a key to watch real models play.
+    </div>
+
+    <div class="match-header">
+      <h2 id="matchTitle">No league running</h2>
+      <p id="matchScore" class="match-score">Pick 4 models and start.</p>
+    </div>
+
+    <div class="versus" aria-live="polite">
+      <div class="fighter" id="fighterA">
+        <div class="fighter-name" id="nameA">-</div>
+        <div class="fighter-move" id="moveA">?</div>
+        <div class="fighter-meta" id="metaA">waiting</div>
+        <p class="fighter-reasoning" id="reasoningA"></p>
+      </div>
+      <div class="vs">VS</div>
+      <div class="fighter" id="fighterB">
+        <div class="fighter-name" id="nameB">-</div>
+        <div class="fighter-move" id="moveB">?</div>
+        <div class="fighter-meta" id="metaB">waiting</div>
+        <p class="fighter-reasoning" id="reasoningB"></p>
+      </div>
+    </div>
+
+    <div id="championBanner" class="champion-banner" hidden></div>
+
+    <h3>League table</h3>
+    <table class="standings" id="standingsTable">
+      <thead>
+        <tr><th>#</th><th>Model</th><th>P</th><th>W</th><th>D</th><th>L</th><th>Rounds</th><th>Forfeits</th><th>Pts</th></tr>
+      </thead>
+      <tbody id="standingsBody">
+        <tr><td colspan="9" class="empty">No matches played yet.</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Fixtures</h3>
+    <ol id="fixtureList" class="fixture-list"></ol>
+
+    <h3>Match log</h3>
+    <div id="matchLog" class="match-log" aria-live="polite">
+      <p class="empty">Rounds will appear here as they are played.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <p>
+    Model Arena runs fully in your browser. Models play through
+    gen.pollinations.ai with your own key and your own Pollen.
+    Source and quest notes: see README.md in this project.
+    <a href="https://pollinations.ai">Made with pollinations.ai</a>
+  </p>
+</footer>
+
+<script src="game-core.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
