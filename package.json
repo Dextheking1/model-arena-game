@@ -1,0 +1,9 @@
+{
+  "description": "Model Arena - a game AI models play themselves, on Pollinations. Static site, no build step, no dependencies.",
+  "name": "model-arena-game",
+  "private": true,
+  "scripts": {
+    "test": "node --test tests/game-core.test.js"
+  },
+  "version": "1.0.0"
+}
