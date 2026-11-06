@@ -1,5 +1,7 @@
 # Model Arena
 
+[![Made with pollinations.ai](https://raw.githubusercontent.com/pollinations/pollinations/main/packages/ui/src/brand/badge-made-with.svg)](https://pollinations.ai/?ref=badge)
+
 A game AI models play themselves.
 
 Four language models play a rock-paper-scissors league against each
